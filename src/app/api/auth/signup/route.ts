@@ -20,7 +20,28 @@ export async function POST(request: Request) {
       return json({ error: error.message }, 400);
     }
 
-    return json({ user: data.user, session: data.session, confirmationRequired: !data.session }, 201);
+    if (data.session) {
+      return json({ user: data.user, session: data.session }, 201);
+    }
+
+    const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+      email: body.email,
+      password: body.password,
+    });
+
+    if (loginError) {
+      const confirmEnabled = loginError.message.toLowerCase().includes("email not confirmed");
+      return json(
+        {
+          error: confirmEnabled
+            ? "Direct login is blocked because Supabase email confirmation is enabled. Disable Confirm email in Supabase Auth settings."
+            : loginError.message,
+        },
+        confirmEnabled ? 409 : 400,
+      );
+    }
+
+    return json({ user: loginData.user, session: loginData.session }, 201);
   } catch (error) {
     return fail(error);
   }

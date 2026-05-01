@@ -31,15 +31,10 @@ export function AuthForm({ mode }: Props) {
     };
 
     try {
-      const result = await api<{ confirmationRequired?: boolean }>(`/api/auth/${mode}`, {
+      await api(`/api/auth/${mode}`, {
         method: "POST",
         body: JSON.stringify(isSignup ? payload : { email: payload.email, password: payload.password }),
       });
-
-      if (isSignup && result.confirmationRequired) {
-        setNotice("Account created. Please confirm your email in Supabase's email before logging in.");
-        return;
-      }
 
       router.push(searchParams.get("next") ?? "/dashboard");
       router.refresh();

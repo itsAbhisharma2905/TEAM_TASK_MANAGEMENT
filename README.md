@@ -35,7 +35,7 @@ Assumptions:
 
 - Supabase Auth is the authentication authority, providing JWTs, password hashing, refresh tokens, and cookie-backed session persistence.
 - Adding a member requires the user to have already signed up.
-- Email confirmation can be enabled or disabled in Supabase depending on deployment needs.
+- Direct login after signup requires Supabase email confirmation to be disabled.
 
 ## Phase 2 - System Design
 
@@ -126,7 +126,7 @@ The codebase follows these rules:
 
 1. Create a Supabase project.
 2. Open Supabase SQL Editor and run `supabase/schema.sql`.
-3. For fast local testing, open Supabase Auth settings and either disable email confirmation or confirm the signup email before logging in.
+3. Open Supabase Authentication, go to Providers, open Email, and turn off Confirm email so users can sign up and log in directly with email and password.
 4. Copy `.env.example` to `.env.local`.
 5. Fill:
 

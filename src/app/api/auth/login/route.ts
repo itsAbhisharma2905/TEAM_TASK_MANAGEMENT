@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 
     if (error) {
       const message = error.message.toLowerCase().includes("email not confirmed")
-        ? "Please confirm your email before logging in."
+        ? "Direct login is blocked because Supabase email confirmation is enabled. Disable Confirm email in Supabase Auth settings."
         : "Invalid email or password";
       return json({ error: message }, 401);
     }
